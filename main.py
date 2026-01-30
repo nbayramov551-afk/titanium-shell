@@ -16,11 +16,12 @@ class TitaniumApp(App):
     @run_on_ui_thread
     def open_link(self):
         webview = WebView(Activity)
-        webview.getSettings().setJavaScriptEnabled(True)
-        webview.getSettings().setDomStorageEnabled(True)
+        settings = webview.getSettings()
+        settings.setJavaScriptEnabled(True)
+        settings.setDomStorageEnabled(True)
         webview.setWebViewClient(WebViewClient())
-        # ÖZ LİNKİNİ BURA QOY:
-        webview.loadUrl("https://ismayil-titanium-link.com")
+        # ÖZ REAL LİNKİNİ BURAYA YAZ
+        webview.loadUrl("https://sənin-sayt-linkin.com")
         Activity.setContentView(webview)
 
 if __name__ == '__main__':
