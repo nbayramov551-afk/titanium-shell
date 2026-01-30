@@ -1,11 +1,9 @@
-name: TITANIUM APK MASTER BUILD
+name: TITANIUM MASTER BUILD
 on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    runs-on: ubuntu-22.04
     
     steps:
       - name: Checkout Code
@@ -14,22 +12,22 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: Install System Dependencies
+      - name: Install Dependencies
         run: |
-          sudo apt-get update
-          # libtinfo5 yerinə libtinfo6 və digər müasir asılılıqlar
-          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip install --upgrade pip
-          pip install --user buildozer cython virtualenv
+          pip install --user buildozer cython==0.29.33 virtualenv
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Avtomatik lisenziya qəbulu və build prosesi
-          yes | buildozer -v android debug
-        continue-on-error: false
+          # Lisenziyaları əvvəlcədən təsdiqləyirik
+          yes | buildozer android debug
+        env:
+          ACCEPT_SDK_LICENSE: "1"
 
       - name: Upload Finished APK
         uses: actions/upload-artifact@v4
