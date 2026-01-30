@@ -1,28 +1,38 @@
-name: TITANIUM APK BUILDER
+name: TITANIUM APK MASTER BUILD
 on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04 # Daha stabil versiya
+    runs-on: ubuntu-latest # GitHub-ın ən yeni serveri
+    permissions:
+      contents: write
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install System Dependencies
         run: |
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-          pip3 install --user --upgrade buildozer cython
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --upgrade pip
+          pip install --user buildozer cython virtualenv
 
-      - name: Build with Buildozer
+      - name: Build with Buildozer (The 2026 Strategy)
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Buildozeri işə salırıq
-          buildozer android debug
+          # Bütün suallara 'yes' deyərək lisenziyaları keçirik
+          yes | buildozer -v android debug
         continue-on-error: false
 
-      - name: Upload APK
+      - name: Upload Finished APK
         uses: actions/upload-artifact@v4
         with:
-          name: Titanium_Nexus_v1
+          name: Titanium-Nexus-v1
           path: bin/*.apk
           
