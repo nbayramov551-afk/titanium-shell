@@ -6,13 +6,13 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
 
-# Stabil kitabxanalar
-requirements = python3,kivy==2.3.0,pyjnius,requests
+# Stabil tələblər
+requirements = python3,kivy==2.3.0,pyjnius,requests,urllib3,certifi
 
 orientation = portrait
 fullscreen = 1
 
-# 2026 üçün ən problemsiz Android versiyaları
+# Android Ayarları (Stabil API 33)
 android.api = 33
 android.minapi = 21
 android.ndk = 25b
