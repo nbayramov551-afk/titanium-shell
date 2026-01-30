@@ -1,9 +1,9 @@
-name: TITANIUM MASTER BUILD
+name: TITANIUM FINAL BUILD
 on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04 # En stabil Linux versiyası
     
     steps:
       - name: Checkout Code
@@ -12,9 +12,9 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.10' # Buildozer-in en sevdiyi Python
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
@@ -24,14 +24,14 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Lisenziyaları əvvəlcədən təsdiqləyirik
-          yes | buildozer android debug
+          # Lisenziyaları qəbul edib build-ə başlayırıq
+          yes | buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "1"
 
-      - name: Upload Finished APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Titanium-Nexus-v1
+          name: Titanium-Nexus-Final
           path: bin/*.apk
           
